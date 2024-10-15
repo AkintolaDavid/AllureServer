@@ -2,6 +2,8 @@ const axios = require("axios");
 require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
@@ -31,10 +33,15 @@ app.use(express.json());
 // Session configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // Replace with a strong secret
+    secret: process.env.SESSION_SECRET, // Replace with a secure secret
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 10 * 60 * 1000 }, // 10 minutes for testing
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // Use your MongoDB connection string
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day (adjust as needed)
+    },
   })
 );
 
