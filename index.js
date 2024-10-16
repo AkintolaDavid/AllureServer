@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 5000;
 // Enable CORS
 app.use(
   cors({
-    origin: "http://localhost:3000", // Replace with your frontend URL
+    origin: "https://allurefrontend.onrender.com/", // Replace with your frontend URL
     credentials: true,
   })
 );
@@ -278,6 +278,9 @@ const CustomizeSchema = new mongoose.Schema({
 
 // Create a model for Customize
 const Customize = mongoose.model("Customize", CustomizeSchema);
+app.get("/api/test", (req, res) => {
+  res.json({ message: "API is working!", timestamp: new Date() });
+});
 
 app.get("/api/customizes", (req, res) => {
   db.customizes.find((err, customizations) => {
