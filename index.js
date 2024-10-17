@@ -14,7 +14,8 @@ const jwt = require("jsonwebtoken");
 const connectDB = require("./config/db"); // MongoDB connection logic
 const mongojs = require("mongojs");
 const fs = require("fs");
-const db = mongojs("allureDB", ["customizes", "users"]); // Assuming 'allureDB' is your database name
+const db = mongojs("allureDB", ["products", "users", "customizes", "otps"]);
+// Assuming 'allureDB' is your database name
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "http://localhost:3000",
   "https://allurefrontend.onrender.com",
+  "https://allure-frontend-mu.vercel.app/",
 ];
 
 const corsOptions = {
