@@ -52,6 +52,30 @@ connectDB();
 // Increase limit to 10MB for JSON and URL encoded data
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+const verifyToken = (req, res, next) => {
+  const token = req.headers["authorization"];
+
+  console.log("Token received:", token);
+
+  if (!token) {
+    return res
+      .status(403)
+      .json({ message: "Please log in before submitting the form!" });
+  }
+
+  jwt.verify(token.split(" ")[1], process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log("Token verification failed:", err);
+      return res
+        .status(401)
+        .json({ message: "Invalid token! Please log in again." });
+    }
+
+    req.userId = decoded.id; // Change to 'id' since the token contains 'id' not 'userId'
+    console.log("Token verified. User ID:", decoded.id);
+    next();
+  });
+};
 const verifyAdminToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Get token from header
   if (!token) return res.status(403).json({ message: "Access denied" });
@@ -103,7 +127,7 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", ProductSchema);
 
 // Route for handling product creation
-app.post("/api/uploadproducts", async (req, res) => {
+app.post("/api/uploadproducts", verifyAdminToken, async (req, res) => {
   const { name, price, category, gender, images, description } = req.body;
 
   // Debugging: Log received data
@@ -233,30 +257,6 @@ app.post("/api/upload", upload.array("images", 2), (req, res) => {
 
   res.status(200).json({ message: "Images uploaded successfully.", images });
 });
-const verifyToken = (req, res, next) => {
-  const token = req.headers["authorization"];
-
-  console.log("Token received:", token);
-
-  if (!token) {
-    return res
-      .status(403)
-      .json({ message: "Please log in before submitting the form!" });
-  }
-
-  jwt.verify(token.split(" ")[1], process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.log("Token verification failed:", err);
-      return res
-        .status(401)
-        .json({ message: "Invalid token! Please log in again." });
-    }
-
-    req.userId = decoded.id; // Change to 'id' since the token contains 'id' not 'userId'
-    console.log("Token verified. User ID:", decoded.id);
-    next();
-  });
-};
 
 // Import Cloudinary config
 
@@ -921,10 +921,6 @@ app.post("/api/verify-otp", async (req, res) => {
       .status(500)
       .json({ success: false, message: "Internal server error" });
   }
-});
-
-app.get("/api/admin", verifyAdminToken, (req, res) => {
-  res.json({ message: "Welcome to the admin page!" });
 });
 
 // Use user routes for other user-related functionality
