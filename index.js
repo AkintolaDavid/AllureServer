@@ -19,10 +19,13 @@ const db = mongojs("allureDB", ["products", "users", "customizes", "otps"]);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const cors = require("cors");
 
 app.use(
   cors({
     origin: "https://allure-frontend-mu.vercel.app", // Replace with your frontend's URL
+    methods: "GET,POST,PUT,DELETE", // Define allowed methods
+    credentials: true, // Allow credentials (if needed for sessions, etc.)
   })
 );
 
@@ -101,7 +104,7 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", ProductSchema);
 
 // Route for handling product creation
-app.post("/api/products", async (req, res) => {
+app.post("/api/uploadproducts", async (req, res) => {
   const { name, price, category, gender, images, description } = req.body;
 
   // Debugging: Log received data
@@ -287,7 +290,6 @@ app.get("/api/customizes", (req, res) => {
       return res.status(500).json({ error: "Failed to fetch customizations" });
     }
 
-    // Fetch corresponding user details for each customization
     const promises = customizations.map(
       (custom) =>
         new Promise((resolve, reject) => {
@@ -298,8 +300,8 @@ app.get("/api/customizes", (req, res) => {
                 reject(err);
               } else {
                 resolve({
-                  ...custom, // Spread customization details
-                  username: user ? user.username : "Unknown User", // Add username to customization data
+                  ...custom,
+                  username: user ? user.username : "Unknown User",
                 });
               }
             }
@@ -314,6 +316,7 @@ app.get("/api/customizes", (req, res) => {
       );
   });
 });
+
 // Assuming you're using Express and mongojs
 app.get("/api/getuser/:userId", async (req, res) => {
   const { userId } = req.params;
