@@ -21,8 +21,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: "https://allure-frontend-mu.vercel.app",
-  credentials: true,
+  origin: [
+    "https://allure-frontend-mu.vercel.app",
+    "https://allurefrontend.onrender.com",
+  ],
+  methods: "GET,POST,PUT,DELETE", // Specify allowed HTTP methods
+  credentials: true, // Allow credentials (if you're using cookies or sessions)
 };
 
 app.use(cors(corsOptions));
@@ -287,24 +291,18 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API is working!", timestamp: new Date() });
 });
 
-app.get("/api/customizes", verifyAdminToken, (req, res) => {
-  // Set CORS headers to allow requests from your frontend
+app.get("/api/customizes", (req, res) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://allure-frontend-mu.vercel.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
 
-  console.log("Fetching customizations...");
-
-  // Fetch all documents from the customizes collection
   db.customizes.find((err, customizations) => {
     if (err) {
-      console.error("Error fetching customizations:", err);
       return res.status(500).json({ error: "Failed to fetch customizations" });
     }
 
-    // Send the retrieved customizations as JSON response
     return res.json(customizations);
   });
 });
