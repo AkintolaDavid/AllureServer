@@ -20,13 +20,12 @@ const db = mongojs("allureDB", ["products", "users", "customizes", "otps"]);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(
-  cors({
-    origin: "https://allure-frontend-mu.vercel.app", // Replace with your frontend's URL
-    methods: "GET,POST,PUT,DELETE", // Define allowed methods
-    credentials: true, // Allow credentials (if needed for sessions, etc.)
-  })
-);
+const corsOptions = {
+  origin: "https://allure-frontend-mu.vercel.app",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Use express.json() middleware to parse JSON requests
 app.use(express.json());
@@ -288,7 +287,7 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API is working!", timestamp: new Date() });
 });
 
-app.get("/api/customizes", (req, res) => {
+app.get("/api/customizes", verifyAdminToken, (req, res) => {
   // Set CORS headers to allow requests from your frontend
   res.setHeader(
     "Access-Control-Allow-Origin",
