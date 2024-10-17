@@ -56,7 +56,7 @@ app.use(
 );
 
 // Connect to the database
-// connectDB();
+connectDB();
 
 // Increase limit to 10MB for JSON and URL encoded data
 app.use(express.json({ limit: "10mb" }));
