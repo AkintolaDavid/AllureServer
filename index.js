@@ -284,6 +284,12 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/customizes", (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://allure-frontend-mu.vercel.app"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  console.log("Fetching customizations...");
   db.customizes.find((err, customizations) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch customizations" });
