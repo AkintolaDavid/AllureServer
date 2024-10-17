@@ -566,7 +566,7 @@ app.post("/api/forgotpassword", async (req, res) => {
   await user.save();
 
   // URL for resetting password, sent to the user's email
-  const resetUrl = `http://localhost:3000/reset-password/${token}`;
+  const resetUrl = `https://allure-frontend-mu.vercel.app/reset-password/${token}`;
 
   // Send reset password email with nodemailer
   try {
