@@ -284,41 +284,24 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/customizes", (req, res) => {
+  // Set CORS headers to allow requests from your frontend
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://allure-frontend-mu.vercel.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
+
   console.log("Fetching customizations...");
+
+  // Fetch all documents from the customizes collection
   db.customizes.find((err, customizations) => {
     if (err) {
+      console.error("Error fetching customizations:", err);
       return res.status(500).json({ error: "Failed to fetch customizations" });
     }
 
-    const promises = customizations.map(
-      (custom) =>
-        new Promise((resolve, reject) => {
-          db.users.findOne(
-            { _id: mongojs.ObjectId(custom.userId) },
-            (err, user) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve({
-                  ...custom,
-                  username: user ? user.username : "Unknown User",
-                });
-              }
-            }
-          );
-        })
-    );
-
-    Promise.all(promises)
-      .then((results) => res.json(results))
-      .catch((err) =>
-        res.status(500).json({ error: "Failed to fetch user data" })
-      );
+    // Send the retrieved customizations as JSON response
+    return res.json(customizations);
   });
 });
 
