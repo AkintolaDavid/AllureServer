@@ -28,21 +28,30 @@ app.use((req, res, next) => {
 
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin); // Allow the origin
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE"); // Specify allowed methods
+    // Allow the specific origin making the request
+    res.setHeader("Access-Control-Allow-Origin", origin);
+
+    // Specify allowed methods
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+
+    // Specify allowed headers (those sent by the client in the request)
     res.setHeader(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    ); // Allowed headers
-    res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies/sessions if needed
+    );
+
+    // Allow credentials like cookies or authorization headers to be sent
+    res.setHeader("Access-Control-Allow-Credentials", "true");
   }
 
   // Handle preflight requests (OPTIONS method)
   if (req.method === "OPTIONS") {
+    // Preflight response, with 200 OK to allow the actual request
     return res.status(200).end();
   }
 
-  next(); // Proceed to the next middleware or route handler
+  // Proceed to the next middleware or route handler
+  next();
 });
 
 app.use(cors(corsOptions));
