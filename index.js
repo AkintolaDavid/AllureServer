@@ -19,15 +19,31 @@ const db = mongojs("allureDB", ["products", "users", "customizes", "otps"]);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-const corsOptions = {
-  origin: [
+// Custom middleware for CORS handling
+app.use((req, res, next) => {
+  const allowedOrigins = [
     "https://allure-frontend-mu.vercel.app",
     "https://allurefrontend.onrender.com",
-  ],
-  methods: "GET,POST,PUT,DELETE", // Specify allowed HTTP methods
-  credentials: true, // Allow credentials (if you're using cookies or sessions)
-};
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin); // Allow the origin
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE"); // Specify allowed methods
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    ); // Allowed headers
+    res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies/sessions if needed
+  }
+
+  // Handle preflight requests (OPTIONS method)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next(); // Proceed to the next middleware or route handler
+});
 
 app.use(cors(corsOptions));
 
