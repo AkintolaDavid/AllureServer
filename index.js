@@ -54,8 +54,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors(corsOptions));
-
 // Use express.json() middleware to parse JSON requests
 app.use(express.json());
 
