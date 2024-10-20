@@ -267,27 +267,22 @@ app.post("/toggleLike", (req, res) => {
     }
   );
 });
-app.post(
-  "/api/upload",
-  verifyAdminToken,
-  upload.array("images", 2),
-  (req, res) => {
-    const images = req.files; // This should be an array of files
-    const userId = req.body.userId; // Ensure you are getting the userId if needed
+app.post("/api/upload", upload.array("images", 2), (req, res) => {
+  const images = req.files; // This should be an array of files
+  const userId = req.body.userId; // Ensure you are getting the userId if needed
 
-    if (!images || images.length === 0) {
-      return res.status(400).json({ message: "No images uploaded." });
-    }
-
-    console.log("Images:", images);
-    console.log("User ID:", userId);
-
-    // Process the images as needed
-    // e.g., upload to Cloudinary, save paths to your database, etc.
-
-    res.status(200).json({ message: "Images uploaded successfully.", images });
+  if (!images || images.length === 0) {
+    return res.status(400).json({ message: "No images uploaded." });
   }
-);
+
+  console.log("Images:", images);
+  console.log("User ID:", userId);
+
+  // Process the images as needed
+  // e.g., upload to Cloudinary, save paths to your database, etc.
+
+  res.status(200).json({ message: "Images uploaded successfully.", images });
+});
 
 // Import Cloudinary config
 
@@ -315,11 +310,11 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/customizes", async (req, res) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://allure-frontend-mu.vercel.app"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  // res.setHeader(
+  //   "Access-Control-Allow-Origin",
+  //   "https://allure-frontend-mu.vercel.app"
+  // );
+  // res.setHeader("Access-Control-Allow-Credentials", "true");
   let query = {};
 
   const products = await Customize.find(query);
