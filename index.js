@@ -153,7 +153,7 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", ProductSchema);
 
 // Route for handling product creation
-app.post("/api/uploadproducts", verifyAdminToken, async (req, res) => {
+app.post("/api/uploadproducts", async (req, res) => {
   const { name, price, category, gender, images, description } = req.body;
 
   // Debugging: Log received data
@@ -314,20 +314,24 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API is working!", timestamp: new Date() });
 });
 
-app.get("/api/customizes", (req, res) => {
+app.get("/api/customizes", async (req, res) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://allure-frontend-mu.vercel.app"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  let query = {};
 
-  db.customizes.find((err, customizations) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to fetch customizations" });
-    }
+  const products = await Customize.find(query);
 
-    return res.json(customizations);
-  });
+  res.status(200).json({ products });
+  // db.customizes.find((err, customizations) => {
+  //   if (err) {
+  //     return res.status(500).json({ error: "Failed to fetch customizations" });
+  //   }
+
+  //   return res.json(customizations);
+  // });
 });
 
 // Assuming you're using Express and mongojs
