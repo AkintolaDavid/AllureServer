@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 5000;
 // Custom middleware for CORS handling
 app.use((req, res, next) => {
   const allowedOrigins = [
+    "http://localhost:3000",
     "https://allure-frontend-mu.vercel.app",
     "https://allurefrontend.onrender.com",
   ];
