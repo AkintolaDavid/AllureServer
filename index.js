@@ -14,7 +14,13 @@ const jwt = require("jsonwebtoken");
 const connectDB = require("./config/db"); // MongoDB connection logic
 const mongojs = require("mongojs");
 const fs = require("fs");
-const db = mongojs("allureDB", ["products", "users", "customizes", "otps"]);
+const db = mongojs("allureDB", [
+  "products",
+  "users",
+  "customizes",
+  "otps",
+  "orders",
+]);
 // Assuming 'allureDB' is your database name
 
 const app = express();
@@ -287,6 +293,60 @@ app.post("/api/upload", upload.array("images", 2), (req, res) => {
 
 // Import Cloudinary config
 
+const orderSchema = new mongoose.Schema({
+  customerName: { type: String, required: true },
+  customerEmail: { type: String, required: true },
+  house_address: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  country: { type: String, required: true },
+  products: [
+    {
+      productId: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      size: { type: String },
+    },
+  ],
+  totalAmount: { type: Number, required: true },
+  orderDate: { type: Date, default: Date.now },
+});
+
+// Create the model for orders
+const Order = mongoose.model("Order", OrderSchema);
+
+app.post("/api/orders", async (req, res) => {
+  try {
+    const {
+      customerName,
+      customerEmail,
+      house_address,
+      city,
+      state,
+      country,
+      products,
+      totalAmount,
+    } = req.body;
+
+    const newOrder = new Order({
+      customerName,
+      customerEmail,
+      house_address,
+      city,
+      state,
+      country,
+      products,
+      totalAmount,
+      orderDate: new Date(),
+    });
+
+    await newOrder.save();
+    res
+      .status(201)
+      .json({ message: "Order placed successfully", order: newOrder });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to place order", error });
+  }
+});
 // Define the schema for Customize
 const CustomizeSchema = new mongoose.Schema({
   userId: String,
@@ -301,7 +361,7 @@ const CustomizeSchema = new mongoose.Schema({
   fullname: String,
   email: String,
   phonenumber: String,
-  images: [String], // Store URLs as an array
+  images: [String], // Store URLs as an arra
 });
 
 // Create a model for Customize
@@ -311,23 +371,11 @@ app.get("/api/test", (req, res) => {
 });
 
 app.get("/api/customizes", async (req, res) => {
-  // res.setHeader(
-  //   "Access-Control-Allow-Origin",
-  //   "https://allure-frontend-mu.vercel.app"
-  // );
-  // res.setHeader("Access-Control-Allow-Credentials", "true");
   let query = {};
 
   const products = await Customize.find(query);
 
   res.status(200).json({ products });
-  // db.customizes.find((err, customizations) => {
-  //   if (err) {
-  //     return res.status(500).json({ error: "Failed to fetch customizations" });
-  //   }
-
-  //   return res.json(customizations);
-  // });
 });
 
 // Assuming you're using Express and mongojs
