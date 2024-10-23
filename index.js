@@ -420,7 +420,7 @@ app.post("/api/verify-payment", async (req, res) => {
       `https://api.paystack.co/transaction/verify/${reference}`,
       {
         headers: {
-          Authorization: `Bearer YOUR_SECRET_KEY`, // Use your Paystack secret key here
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEYs}`, // Use your Paystack secret key here
         },
       }
     );
