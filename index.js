@@ -316,9 +316,9 @@ const orderSchema = new mongoose.Schema({
 
 // Create the model for orders
 const Order = mongoose.model("Order", orderSchema);
-
 app.post("/api/orders", async (req, res) => {
   try {
+    console.log(req.body); // Log the request body to check incoming data
     const {
       customerName,
       customerEmail,
@@ -347,9 +347,11 @@ app.post("/api/orders", async (req, res) => {
       .status(201)
       .json({ message: "Order placed successfully", order: newOrder });
   } catch (error) {
+    console.error("Error placing order:", error); // Log the error for better context
     res.status(500).json({ message: "Failed to place order", error });
   }
 });
+
 app.get("/api/getorders", async (req, res) => {
   try {
     let query = {};
