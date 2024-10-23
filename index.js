@@ -302,9 +302,12 @@ const orderSchema = new mongoose.Schema({
   country: { type: String, required: true },
   products: [
     {
-      productId: { type: String, required: true },
-      quantity: { type: Number, required: true },
-      size: { type: String },
+      productId: String,
+      name: String,
+      price: Number,
+      quantity: Number,
+      size: String,
+      imageUrl: String, // Include image URL
     },
   ],
   totalAmount: { type: Number, required: true },
