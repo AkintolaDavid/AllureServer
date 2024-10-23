@@ -307,7 +307,7 @@ const orderSchema = new mongoose.Schema({
       price: Number,
       quantity: Number,
       size: String,
-      imageUrl: String, // Include image URL
+      imageUrl: [String], // Include image URL
     },
   ],
   totalAmount: { type: Number, required: true },
