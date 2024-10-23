@@ -414,13 +414,13 @@ app.post("/api/verify-payment", async (req, res) => {
       .status(400)
       .json({ message: "Transaction reference is missing" });
   }
-
+  console.log(process.env.PAYSTACK_SECRET_KEY);
   try {
     const response = await axios.get(
       `https://api.paystack.co/transaction/verify/${reference}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`, // Use your Paystack secret key here
+          Authorization: `Bearer sk_test_f6d16000a140804763efa6e90528d8c1459972bc`, // Use your Paystack secret key here
         },
       }
     );
