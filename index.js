@@ -347,6 +347,18 @@ app.post("/api/orders", async (req, res) => {
     res.status(500).json({ message: "Failed to place order", error });
   }
 });
+app.get("/api/getorders", async (req, res) => {
+  try {
+    let query = {};
+
+    const orders = await Order.find(query);
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 // Define the schema for Customize
 const CustomizeSchema = new mongoose.Schema({
   userId: String,
