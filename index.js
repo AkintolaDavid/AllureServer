@@ -312,7 +312,7 @@ const orderSchema = new mongoose.Schema({
 });
 
 // Create the model for orders
-const Order = mongoose.model("Order", OrderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 app.post("/api/orders", async (req, res) => {
   try {
