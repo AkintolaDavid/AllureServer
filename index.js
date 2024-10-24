@@ -953,25 +953,34 @@ const sendOtpToEmail = async (email, otp) => {
 app.post("/api/send-otp", async (req, res) => {
   const { email } = req.body;
   const adminEmail = process.env.EMAIL_USER;
+
+  // Log emails for debugging
+  console.log("Received email:", email);
+  console.log("Admin email from environment:", adminEmail);
+
+  // Check if the email matches the admin email in the environment variable
   if (email !== adminEmail) {
     return res
       .status(400)
       .json({ success: false, message: "Please enter admin email" });
   }
+
   const otp = Math.floor(1000 + Math.random() * 9000);
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 30 minutes from now
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
 
   // Save the OTP and expiration time in the database
   const otpEntry = new Otp({ email, otp, expiresAt });
   await otpEntry.save();
 
-  // Send the OTP to the email (assume you have this implemented)
   try {
+    // Send the OTP to the email
     await sendOtpToEmail(email, otp);
+    return res
+      .status(200)
+      .json({ success: true, message: "OTP sent successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Error sending OTP" });
   }
-  res.status(200).json({ success: true, message: "OTP sent successfully" });
 });
 app.post("/api/verify-otp", async (req, res) => {
   const { otp } = req.body;
