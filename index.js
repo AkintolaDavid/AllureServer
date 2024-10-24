@@ -952,6 +952,12 @@ const sendOtpToEmail = async (email, otp) => {
 
 app.post("/api/send-otp", async (req, res) => {
   const { email } = req.body;
+  const adminEmail = process.env.EMAIL_USER;
+  if (email !== adminEmail) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Please enter admin email" });
+  }
   const otp = Math.floor(1000 + Math.random() * 9000);
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 30 minutes from now
 
