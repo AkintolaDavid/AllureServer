@@ -341,7 +341,6 @@ app.post("/api/orders", async (req, res) => {
       totalAmount,
       orderDate: new Date(),
     });
-
     await newOrder.save();
     res
       .status(201)
