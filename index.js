@@ -952,7 +952,7 @@ const sendOtpToEmail = async (email, otp) => {
 
 app.post("/api/send-otp", async (req, res) => {
   const { email } = req.body;
-  const adminEmail = process.env.EMAIL_USER;
+  const adminEmail = "nkemdilimoganah@gmail.com";
 
   // Log emails for debugging
   console.log("Received email:", email);
