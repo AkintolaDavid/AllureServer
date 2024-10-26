@@ -966,7 +966,7 @@ app.post("/api/send-otp", async (req, res) => {
   }
 
   const otp = Math.floor(1000 + Math.random() * 9000);
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
+  const expiresAt = new Date(Date.now() + 20 * 60 * 1000); // OTP expires in 10 minutes
 
   // Save the OTP and expiration time in the database
   const otpEntry = new Otp({ email, otp, expiresAt });
