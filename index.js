@@ -960,7 +960,7 @@ app.post("/api/send-otp", async (req, res) => {
   console.log("Admin email from environment:", adminEmail);
 
   // Check if the email matches the admin email in the environment variable
-  if (email !== adminEmail) {
+  if (email !== process.env.ADMINEMAIL) {
     return res
       .status(400)
       .json({ success: false, message: "Please enter admin email" });
