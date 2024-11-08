@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 5000;
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://allure-frontend-mu.vercel.app",
+    "https://allure-ruddy.vercel.app",
     "https://allurefrontend.onrender.com",
   ];
 
@@ -209,7 +209,8 @@ app.get("/api/products", async (req, res) => {
     let query = {};
 
     const products = await Product.find(query);
-
+    console.log(products);
+    console.log("products");
     res.status(200).json({ products });
   } catch (error) {
     console.error("Error fetching products:", error);
