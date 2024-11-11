@@ -771,7 +771,7 @@ app.post("/api/contact", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      to: process.env.EMAIL_USER, // Send to the admin's email
+      to: process.env.ADMINEMAIL, // Send to the admin's email
       subject: "Allure New Contact Form Submission",
       html: `
       <div
