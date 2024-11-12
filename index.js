@@ -29,6 +29,7 @@ const PORT = process.env.PORT || 5000;
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
+    "http://localhost:30001",
     "https://allure-ruddy.vercel.app",
     "https://allurefrontend.onrender.com",
   ];
@@ -641,7 +642,7 @@ app.post("/api/forgotpassword", async (req, res) => {
   try {
     await transporter.sendMail({
       to: email,
-      subject: "ALLURE Password Reset",
+      subject: "ELYSIQUE Password Reset",
       html: `
       <div
       style="
