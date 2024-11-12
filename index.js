@@ -29,8 +29,8 @@ const PORT = process.env.PORT || 5000;
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
-    "http://localhost:30001",
-    "https://allure-ruddy.vercel.app",
+    "http://localhost:3001",
+    "https://allure-nu.vercel.app",
     "https://allurefrontend.onrender.com",
   ];
 
